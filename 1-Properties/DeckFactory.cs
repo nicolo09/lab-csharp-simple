@@ -9,57 +9,70 @@ namespace Properties
     /// </summary>
     public class DeckFactory
     {
-        private string[] seeds;
-
-        private string[] names;
-
-        // TODO improve
-        public IList<string> GetSeeds()
+        private string[] _seeds;
+        public IList<string> Seeds
         {
-            return this.seeds.ToList();
+            get => _seeds.ToList();
+            set => _seeds = value.ToArray();
         }
 
-        // TODO improve
-        public void SetSeeds(IList<string> seeds)
+        private string[] _names;
+        public int DeckSize => this._names.Length * this._seeds.Length;
+        public IList<string> Names
         {
-            this.seeds = seeds.ToArray();
+            get => _names.ToList();
+            set => _names = value.ToArray();
         }
 
-        // TODO improve
-        public IList<string> GetNames()
+        public ISet<Card> Deck
         {
-            return this.names.ToList();
+            get
+            {
+                if (this._names == null || this._seeds == null)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                return new HashSet<Card>(Enumerable
+                    .Range(0, this._names.Length)
+                    .SelectMany(i => Enumerable
+                        .Repeat(i, this._seeds.Length)
+                        .Zip(
+                            Enumerable.Range(0, this._seeds.Length),
+                            (n, s) => Tuple.Create(this._names[n], this._seeds[s], n)))
+                    .Select(tuple => new Card(tuple))
+                    .ToList());
+            }
         }
 
-        // TODO improve
-        public void SetNames(IList<string> names)
-        {
-            this.names = names.ToArray();
-        }
+        /*
+         // TODO improve
+         public IList<string> GetSeeds()
+         {
+             return this._seeds.ToList();
+         }
 
+         // TODO improve
+         public void SetSeeds(IList<string> seeds)
+         {
+             this._seeds = seeds.ToArray();
+         }
+        */
+        /*
+                // TODO improve
+                public IList<string> GetNames()
+                {
+                    return this._names.ToList();
+                }
+
+                // TODO improve
+                public void SetNames(IList<string> names)
+                {
+                    this._names = names.ToArray();
+                }
+        */
         // TODO improve
-        public int GetDeckSize()
-        {
-            return this.names.Length * this.seeds.Length;
-        }
 
         /// TODO improve
-        public ISet<Card> GetDeck()
-        {
-            if (this.names == null || this.seeds == null)
-            {
-                throw new InvalidOperationException();
-            }
-
-            return new HashSet<Card>(Enumerable
-                .Range(0, this.names.Length)
-                .SelectMany(i => Enumerable
-                    .Repeat(i, this.seeds.Length)
-                    .Zip(
-                        Enumerable.Range(0, this.seeds.Length),
-                        (n, s) => Tuple.Create(this.names[n], this.seeds[s], n)))
-                .Select(tuple => new Card(tuple))
-                .ToList());
-        }
     }
 }
