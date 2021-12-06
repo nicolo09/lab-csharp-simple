@@ -1,5 +1,6 @@
 namespace ComplexAlgebra
 {
+    using System;
     /// <summary>
     /// A type for representing Complex numbers.
     /// </summary>
@@ -15,8 +16,60 @@ namespace ComplexAlgebra
     /// TODO:     - e.g. via the ToString() method
     /// TODO: * checking whether two complex numbers are equal or not
     /// TODO:     - e.g. via the Equals(object) method
-    public class Complex
+    public class Complex : IEquatable<Complex>
     {
-        // TODO: fill this class\
+        public double Real { get; private set; }
+        public double Imaginary { get; private set; }
+        public double Phase { get => Math.Atan2(Imaginary, Real); }
+        public double Modulus { get => Math.Sqrt(Math.Pow(Real, 2) + Math.Pow(Imaginary, 2)); }
+
+
+        public Complex(double real, double imm)
+        {
+            Real = real;
+            Imaginary = imm;
+        }
+        public Complex Complement()
+        {
+            return new Complex(Real, -Imaginary);
+        }
+
+        public Complex Plus(Complex a)
+        {
+            return new Complex(Real + a.Real, Imaginary + a.Imaginary);
+        }
+
+        public Complex Minus(Complex a)
+        {
+            return new Complex(Real-a.Real,Imaginary-a.Imaginary);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Complex);
+        }
+
+        public bool Equals(Complex other)
+        {
+            return other != null &&
+                   Real == other.Real &&
+                   Imaginary == other.Imaginary;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Real, Imaginary);
+        }
+        public override string ToString()
+        {
+            if (Imaginary >= 0)
+            {
+                return Real.ToString() + " + i" + Imaginary.ToString();
+            }
+            else
+            {
+                return Real.ToString() + " - i" + Math.Abs(Imaginary).ToString();
+            }
+        }
     }
 }
