@@ -41,7 +41,7 @@ namespace ComplexAlgebra
 
         public Complex Minus(Complex a)
         {
-            return new Complex(Real-a.Real,Imaginary-a.Imaginary);
+            return new Complex(Real - a.Real, Imaginary - a.Imaginary);
         }
 
         public override bool Equals(object obj)
@@ -60,16 +60,44 @@ namespace ComplexAlgebra
         {
             return HashCode.Combine(Real, Imaginary);
         }
+
         public override string ToString()
         {
-            if (Imaginary >= 0)
+            string n = "";
+            if (Real > 0)
             {
-                return Real.ToString() + " + i" + Imaginary.ToString();
+                n = "+" + Real.ToString();
+            }
+            else if (Real < 0)
+            {
+                n = Real.ToString();
             }
             else
             {
-                return Real.ToString() + " - i" + Math.Abs(Imaginary).ToString();
+                //Real=0
             }
+
+
+            if (Imaginary * Imaginary == 1)
+            {
+                n = n + (Imaginary == 1 ? "+i" : "-i");
+            }
+            else if (Imaginary > 0)
+            {
+                n = n + "+" + Imaginary.ToString();
+            }
+            else if (Imaginary < 0)
+            {
+                n = n + Imaginary.ToString();
+            }
+            else
+            {
+                //Immaginary=0
+            }
+
+            if (Real == 0 && Imaginary == 0) return "0";
+
+            return n;
         }
     }
 }
