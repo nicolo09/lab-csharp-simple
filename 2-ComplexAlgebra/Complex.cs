@@ -29,6 +29,7 @@ namespace ComplexAlgebra
             Real = real;
             Imaginary = imm;
         }
+
         public Complex Complement()
         {
             return new Complex(Real, -Imaginary);
